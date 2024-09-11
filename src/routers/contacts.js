@@ -15,6 +15,10 @@ contactRouter.get(
 
 contactRouter.post('/', ctrlWrapper(contactControllers.addContactController));
 
+// contactRouter.put(
+//   '/:id',
+//   ctrlWrapper(contactControllers.upsertContactController),
+// );
 contactRouter.patch(
   '/:contactId',
   ctrlWrapper(contactControllers.patchContactController),
