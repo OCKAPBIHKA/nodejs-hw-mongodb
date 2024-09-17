@@ -1,8 +1,25 @@
 import createHttpError from 'http-errors';
+
 import * as contactServices from '../services/contacts.js';
 
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+import parseSortParams from '../utils/parseSortParams.js';
+
+import { sortFields } from '../db/models/contact.js';
+
 export const getAllContactsController = async (req, res) => {
-  const data = await contactServices.getAllContacts();
+  const { perPage, page } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams({ ...req.query, sortFields });
+  const { type: contactType, isFavourite } = req.query;
+
+  const data = await contactServices.getAllContacts({
+    perPage,
+    page,
+    sortBy,
+    sortOrder,
+    contactType,
+    isFavourite,
+  });
 
   res.json({
     status: 200,
@@ -35,22 +52,7 @@ export const addContactController = async (req, res) => {
     data,
   });
 };
-// export const upsertContactController = async (req, res) => {
-//   const { id } = req.params;
-//   const { isNew, data } = await contactServices.updateContact(
-//     { _id: id },
-//     req.body,
-//     { upsert: true },
-//   );
 
-//   const status = isNew ? 201 : 200;
-
-//   res.status(status).json({
-//     status,
-//     message: 'Contact upsert successfully',
-//     data,
-//   });
-// };
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
   const data = await contactServices.updateContact(
