@@ -63,7 +63,7 @@ export const updateContact = async (filter, data, options = {}) => {
 
   return {
     data: rawResult.value,
-    // isNew: Boolean(rawResult?.lastErrorObject?.upserted), зараз це не потрiбно, але я залишу провсяк
+    //
   };
 };
 
